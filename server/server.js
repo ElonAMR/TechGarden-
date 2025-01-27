@@ -24,3 +24,5 @@ app.listen(HTTP_PORT,()=>{
 });
 
 
+const esp=require('./routers/esp');
+app.use('/esp',esp);
