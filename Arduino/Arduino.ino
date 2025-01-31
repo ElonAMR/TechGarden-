@@ -2,6 +2,10 @@
 #define a1a 18
 #define a1b 19
 
+unsigned long lastCheck=0;
+const unsigned long Minutes=(1000 * 60)*10;
+
+
 //------------state mode-----------
 #define Mode_Temperature 100
 #define Mode_SoilHumidity 101
@@ -27,5 +31,10 @@ void setup() {
 void loop() {
   // sendData();
   // delay(5000); // Delay before next data transmission
+
+  if(millis()-lastCheck > Minutes){
+    lastCheck=millis();
+    Serial.println("check mode work from server");
+  }
   
 }
