@@ -21,20 +21,44 @@ void setup() {
   // WiFi_SETUP();
   pinMode(a1a,OUTPUT);
   pinMode(a1b,OUTPUT);
-  digitalWrite(a1a,HIGH);
-  digitalWrite(a1b,LOW);
-  delay(10000);
-  digitalWrite(a1a,HIGH);
-  digitalWrite(a1b,HIGH);
+
 }
 
 void loop() {
   // sendData();
-  // delay(5000); // Delay before next data transmission
 
   if(millis()-lastCheck > Minutes){
     lastCheck=millis();
     Serial.println("check mode work from server");
+    switch(modeWork){
+        case Mode_Temperature:
+            Serial.println("Mode: Temperature");
+            break;
+        case Mode_SoilHumidity:
+            Serial.println("Mode: Soil Humidity");
+            break;
+        case Mode_Shabbat:
+            Serial.println("Mode: Shabbat");
+            break;
+        case Mode_Manual:
+            Serial.println("Mode: Manual");
+            break;
+        default:
+            Serial.println("Unknown mode, switching to Manual");
+            modeWork = Mode_Manual;
+            break;
+    }
   }
   
+}
+
+
+function pumpOn(){
+    digitalWrite(a1a,HIGH);
+    digitalWrite(a1b,LOW);
+}
+
+function pumpOff(){
+  digitalWrite(a1a,HIGH);
+  digitalWrite(a1b,HIGH);
 }
