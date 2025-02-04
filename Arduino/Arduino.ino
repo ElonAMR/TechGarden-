@@ -4,6 +4,15 @@
 #define DHTTYPE DHT11
 
 DHT dht(DHTPIN,DHTTYPE);
+
+
+
+int lightLDR=39;
+
+int soilMoisture=39;
+
+
+
 // #define a1a 18
 // #define a1b 19
 
@@ -11,8 +20,6 @@ DHT dht(DHTPIN,DHTTYPE);
 // const unsigned long Minutes=(1000 * 60)*10;
 
 
-
-int lightLDR=39;
 
 //------------state mode-----------
 // #define Mode_Temperature 100
@@ -26,31 +33,39 @@ int lightLDR=39;
 
 void setup() {
   Serial.begin(115200);
-  dht.begin();
+  // dht.begin();
   // WiFi_SETUP();
   // pinMode(a1a,OUTPUT);
   // pinMode(a1b,OUTPUT);
+
 
 }
 
 void loop() {
   // sendData();
 // int light=analogRead(lightLDR);
-// int mapValue = map(light, 0, 4095, 0, 255);
+// int lightLDRValue = map(light, 0, 4095, 0, 100);
 // Serial.println(mapValue);
 // delay(500);
 
-float temperature=dht.readTemperature();
-float humidity = dht.readHumidity(); 
- Serial.print("🌡️ temperature: ");
-  Serial.print(temperature);
-  Serial.println(" °C");
+int soilMoistureValue=analogRead(soilMoisture);
+int moistureValue = map(soilMoistureValue, 0, 4095, 0, 100);
+Serial.println(moistureValue);
+delay(1000);
 
-  Serial.print("💧 humidity: ");
-  Serial.print(humidity);
-  Serial.println(" %");
 
-  delay(2000);
+
+
+// float temperature=dht.readTemperature();
+// float humidity = dht.readHumidity();
+//  Serial.print("🌡️ temperature: ");
+//   Serial.print(temperature);
+//   Serial.println(" °C");
+
+//   Serial.print("💧 humidity: ");
+//   Serial.print(humidity);
+//   Serial.println(" %");
+
 
 //   if(millis()-lastCheck > Minutes){
 //     lastCheck=millis();
@@ -75,7 +90,7 @@ float humidity = dht.readHumidity();
 //             modeWork = Mode_Manual;
 //             break;
 //     }
-  
+
 }
 
 
