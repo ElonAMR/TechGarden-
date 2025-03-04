@@ -27,7 +27,28 @@ int soilMoisture=39;
 // #define Mode_Shabbat 102
 // #define Mode_Manual 103
 
-// int modeWork;
+
+
+//------------temp mode-----------
+// int currentState;
+// float temp;
+// int minTime;
+// int maxTime;
+
+// temp = doc["temperature"]["temp"];
+// minTime = doc["temperature"]["minTime"];
+// maxTime = doc["temperature"]["maxTime"];
+
+
+
+
+
+//----------------------------------
+
+
+
+
+
 
 
 

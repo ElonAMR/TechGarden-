@@ -1,0 +1,9 @@
+{
+  "state": "100",
+  "temperature":{
+      "temp": 23.50,
+      "minTime": 1,
+      "maxTime": 3
+  },
+
+}
