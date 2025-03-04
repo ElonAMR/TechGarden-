@@ -5,5 +5,16 @@
       "minTime": 1,
       "maxTime": 3
   },
+  "soilHumidity": {
+    "desiredHumidity": 60
+  },
+  "shabbat": {
+    "startTime": "06:00",
+    "endTime": "08:00",
+    "wateringDuration": 30
+  },
+    "manual": {
+      "activatePump": true
+   }
 
 }

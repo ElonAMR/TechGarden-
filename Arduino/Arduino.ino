@@ -39,16 +39,25 @@ int soilMoisture=39;
 // minTime = doc["temperature"]["minTime"];
 // maxTime = doc["temperature"]["maxTime"];
 
+//----------------------------------
 
 
-
+//------------soilMoisture mode-----------
+// desiredHumidity = doc["soilHumidity"]["desiredHumidity"];
 
 //----------------------------------
 
 
+//------------shabbat mode-----------
+// startTime = doc["shabbat"]["startTime"].as<String>();
+// endTime = doc["shabbat"]["endTime"].as<String>();
+// wateringDuration = doc["shabbat"]["wateringDuration"];
+//----------------------------------
 
+//------------manual mode-----------
+// activatePump = doc["manual"]["activatePump"];
 
-
+//----------------------------------
 
 
 
