@@ -1,15 +1,15 @@
-#include <DHT.h>
+// #include <DHT.h>
+//
+// #define DHTPIN 16
+// #define DHTTYPE DHT11
 
-#define DHTPIN 16
-#define DHTTYPE DHT11
-
-DHT dht(DHTPIN,DHTTYPE);
-
-
-
-int lightLDR=39;
-
-int soilMoisture=39;
+// DHT dht(DHTPIN,DHTTYPE);
+//
+//
+//
+// int lightLDR=39;
+//
+// int soilMoisture=39;
 
 
 
@@ -22,10 +22,10 @@ int soilMoisture=39;
 
 
 //------------state mode-----------
-// #define Mode_Temperature 100
-// #define Mode_SoilHumidity 101
-// #define Mode_Shabbat 102
-// #define Mode_Manual 103
+// #define TEMP_MODE 100
+// #define SOIL_MOISTURE_MODE 101
+// #define SHABBAT_MODE 102
+// #define MANUAL_MODE 103
 
 
 
@@ -78,10 +78,10 @@ void loop() {
 // Serial.println(mapValue);
 // delay(500);
 
-int soilMoistureValue=analogRead(soilMoisture);
-int moistureValue = map(soilMoistureValue, 0, 4095, 0, 100);
-Serial.println(moistureValue);
-delay(1000);
+// int soilMoistureValue=analogRead(soilMoisture);
+// int moistureValue = map(soilMoistureValue, 0, 4095, 0, 100);
+// Serial.println(moistureValue);
+// delay(1000);
 
 
 
@@ -98,21 +98,22 @@ delay(1000);
 
 
 //   if(millis()-lastCheck > Minutes){
+//     currentState = GetState();
 //     lastCheck=millis();
-//     Serial.println("check mode work from server");
+//     Serial.println("current State = "+currentState);
 //   }
 //
-//   switch(modeWork){
-//         case Mode_Temperature:
+//   switch(currentState){
+//         case TEMP_MODE:
 //             Serial.println("Mode: Temperature");
 //             break;
-//         case Mode_SoilHumidity:
+//         case SOIL_MOISTURE_MODE:
 //             Serial.println("Mode: Soil Humidity");
 //             break;
-//         case Mode_Shabbat:
+//         case SHABBAT_MODE:
 //             Serial.println("Mode: Shabbat");
 //             break;
-//         case Mode_Manual:
+//         case MANUAL_MODE:
 //             Serial.println("Mode: Manual");
 //             break;
 //         default:
