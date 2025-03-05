@@ -9,18 +9,17 @@ router.get('/',(res,req)=>{
 });
 
 router.get('/state',(res,req)=>{
-    let data=JSON.parse(fs.readFileSync("Inside_information.json"));
+    let data = JSON.parse(fs.readFileSync("Inside_information.json", "utf8"));
     data={
         state:data.state,
-        date:new Date()
+        date:new Date().getHours()
     }
     res.JSON(data);
-
 });
 
 router.get('/dataMode' ,(req, res)=>{
     const {state} = req.query;
-    let data=JSON.parse(fs.readFileSync("Inside_information.json"));
+    let data = JSON.parse(fs.readFileSync("Inside_information.json", "utf8"));
     res.json(data[state]);
 })
 
