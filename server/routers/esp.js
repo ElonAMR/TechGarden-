@@ -1,7 +1,6 @@
 const express = require('express');
-const fs = require("node:fs");
 const router = express.Router();
-
+const fs=require('fs');
 
 router.get('/',(res,req)=>{
     const  {temp , light , moisture} = req.query;
