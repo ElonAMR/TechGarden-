@@ -4,7 +4,8 @@ const router = express.Router();
 
 
 router.get('/',(res,req)=>{
-    console.log(`hello elon`);
+    const  {temp , light , moisture} = req.query;
+    console.log("temp = "+temp + ", light = "+light +", moisture = "+moisture);
 });
 
 router.get('/state',(res,req)=>{
