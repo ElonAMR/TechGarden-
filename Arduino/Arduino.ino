@@ -1,5 +1,6 @@
-// #include <DHT.h>
-//
+#include <DHT.h>
+#include <ArduinoJson.h>
+
 // #define DHTPIN 16
 // #define DHTTYPE DHT11
 
@@ -12,11 +13,6 @@
 // #define a1b 19
 
 
-//------------state mode-----------
-// #define TEMP_MODE 100
-// #define SOIL_MOISTURE_MODE 101
-// #define SHABBAT_MODE 102
-// #define MANUAL_MODE 103
 
 
 
@@ -52,9 +48,17 @@
 
 //------------הגדרת משתנים כלליים---------------
 
+#define TEMP_MODE 100
+#define SOIL_MOISTURE_MODE 101
+#define SHABBAT_MODE 102
+#define MANUAL_MODE 103
+
 int currentState;
-unsigned long lastCheckTime=0;
-const unsigned long CHECK_10_MIN = (1000 * 60) * 10; // convert milli-seconds to 10 min
+unsigned long lastCheckTime = 0;
+const unsigned long ONE_MINUTES = (1000 * 60); // convert milli-seconds to 1 min
+
+
+float currentTemp;
 
 
 
@@ -73,34 +77,14 @@ void setup() {
 
 }
 
+
+
+
+
+
 void loop() {
-// sendData();
-// int light=analogRead(lightLDR);
-// int lightLDRValue = map(light, 0, 4095, 0, 100);
-// Serial.println(mapValue);
-// delay(500);
 
-// int soilMoistureValue=analogRead(soilMoisture);
-// int moistureValue = map(soilMoistureValue, 0, 4095, 0, 100);
-// Serial.println(moistureValue);
-// delay(1000);
-
-
-// float temperature=dht.readTemperature();
-// float humidity = dht.readHumidity();
-//  Serial.print("🌡️ temperature: ");
-//   Serial.print(temperature);
-//   Serial.println(" °C");
-
-//   Serial.print("💧 humidity: ");
-//   Serial.print(humidity);
-//   Serial.println(" %");
-
-
-
-
-
-  if( millis() - lastCheckTime >= CHECK_10_MIN){
+  if( (millis() - lastCheckTime) >= (ONE_MINUTES * 10){
     currentState = GetState();
     lastCheckTime = millis();
     Serial.println("current State = "+ string(currentState));
@@ -109,6 +93,8 @@ void loop() {
   switch(currentState){
         case TEMP_MODE:
             Serial.println("Mode: Temperature");
+            currentTemp = dht.readTemperature();
+
             break;
         case SOIL_MOISTURE_MODE:
             Serial.println("Mode: Soil Humidity");
@@ -128,6 +114,13 @@ void loop() {
 }
 
 
+
+
+
+
+
+
+
 // function pumpOn(){
 //     digitalWrite(a1a,HIGH);
 //     digitalWrite(a1b,LOW);
@@ -137,3 +130,28 @@ void loop() {
 //   digitalWrite(a1a,HIGH);
 //   digitalWrite(a1b,HIGH);
 // }
+
+
+
+
+
+// sendData();
+// int light=analogRead(lightLDR);
+// int lightLDRValue = map(light, 0, 4095, 0, 100);
+// Serial.println(mapValue);
+// delay(500);
+
+// int soilMoistureValue=analogRead(soilMoisture);
+// int moistureValue = map(soilMoistureValue, 0, 4095, 0, 100);
+// Serial.println(moistureValue);
+// delay(1000);
+
+
+// float humidity = dht.readHumidity();
+//  Serial.print("🌡️ temperature: ");
+//   Serial.print(temperature);
+//   Serial.println(" °C");
+
+//   Serial.print("💧 humidity: ");
+//   Serial.print(humidity);
+//   Serial.println(" %");
