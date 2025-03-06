@@ -5,20 +5,11 @@
 
 // DHT dht(DHTPIN,DHTTYPE);
 //
-//
-//
 // int lightLDR=39;
-//
 // int soilMoisture=39;
-
-
 
 // #define a1a 18
 // #define a1b 19
-
-// unsigned long lastCheck=0;
-// const unsigned long Minutes=(1000 * 60)*10;
-
 
 
 //------------state mode-----------
@@ -59,6 +50,17 @@
 
 //----------------------------------
 
+//------------הגדרת משתנים כלליים---------------
+
+int currentState;
+unsigned long lastCheckTime=0;
+const unsigned long CHECK_10_MIN = (1000 * 60) * 10; // convert milli-seconds to 10 min
+
+
+
+
+
+
 
 
 void setup() {
@@ -72,7 +74,7 @@ void setup() {
 }
 
 void loop() {
-  // sendData();
+// sendData();
 // int light=analogRead(lightLDR);
 // int lightLDRValue = map(light, 0, 4095, 0, 100);
 // Serial.println(mapValue);
@@ -82,8 +84,6 @@ void loop() {
 // int moistureValue = map(soilMoistureValue, 0, 4095, 0, 100);
 // Serial.println(moistureValue);
 // delay(1000);
-
-
 
 
 // float temperature=dht.readTemperature();
@@ -97,30 +97,33 @@ void loop() {
 //   Serial.println(" %");
 
 
-//   if(millis()-lastCheck > Minutes){
-//     currentState = GetState();
-//     lastCheck=millis();
-//     Serial.println("current State = "+currentState);
-//   }
-//
-//   switch(currentState){
-//         case TEMP_MODE:
-//             Serial.println("Mode: Temperature");
-//             break;
-//         case SOIL_MOISTURE_MODE:
-//             Serial.println("Mode: Soil Humidity");
-//             break;
-//         case SHABBAT_MODE:
-//             Serial.println("Mode: Shabbat");
-//             break;
-//         case MANUAL_MODE:
-//             Serial.println("Mode: Manual");
-//             break;
-//         default:
-//             Serial.println("Unknown mode, switching to Manual");
-//             modeWork = Mode_Manual;
-//             break;
-//     }
+
+
+
+  if( millis() - lastCheckTime >= CHECK_10_MIN){
+    currentState = GetState();
+    lastCheckTime = millis();
+    Serial.println("current State = "+ string(currentState));
+  }
+
+  switch(currentState){
+        case TEMP_MODE:
+            Serial.println("Mode: Temperature");
+            break;
+        case SOIL_MOISTURE_MODE:
+            Serial.println("Mode: Soil Humidity");
+            break;
+        case SHABBAT_MODE:
+            Serial.println("Mode: Shabbat");
+            break;
+        case MANUAL_MODE:
+            Serial.println("Mode: Manual");
+            break;
+        default:
+            Serial.println("Unknown mode, switching to Manual");
+            currentState = Mode_Manual;
+            break;
+    }
 
 }
 
