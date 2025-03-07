@@ -1,6 +1,11 @@
 #include <DHT.h>
 #include <ArduinoJson.h>
 
+
+
+
+
+#define lightSensor=39;
 //------------הגדרת משתנים כלליים---------------
 
 #define TEMP_MODE 100
@@ -13,14 +18,18 @@ JsonDocument doc;
 int currentState;
 unsigned long lastCheckTime = 0;
 const unsigned long ONE_MINUTES = (1000 * 60); // convert milli-seconds to 1 min
+unsigned long DataPullTime;
+unsigned long activationTime;
 
 bool isOnPump;
 int counterOnPump = 0;
+unsigned long DataPullTime;
+unsigned long pumpOnTime;
 
 float currentTemp;
 float tempServer;
 int minTime ,maxTime ;
-
+int light;
 
 
 
@@ -32,7 +41,8 @@ void setup() {
   // WiFi_SETUP();
   // pinMode(a1a,OUTPUT);
   // pinMode(a1b,OUTPUT);
-    lastCheckTime=millis();
+  isOnPump = true;
+  lastCheckTime=millis();
 }
 
 
@@ -50,8 +60,43 @@ void loop() {
 
   switch(currentState){
         case TEMP_MODE:
+
             Serial.println("Mode: Temperature");
+
             currentTemp = dht.readTemperature();
+            light = map(analogRead(lightSensor),0,4095,0,100);
+             if((millis() - DataPullTime) > (2 * minutes)){
+                deserializeJson(doc, getJsonData("temperature"));
+                temp = (float) doc["temp"];
+                minTime = doc["minTime"];
+                maxTime = doc["maxTime"];
+                DataPullTime = millis();
+             }
+
+            if(light > 90){
+                isOnPump = true;
+            }else if(light < 10 && counterOnPump == 2){
+                isOnPump = true;
+                counterOnPump = 0 ;
+            }
+
+           if(isOnPump && temp < CurrentTemp && countOn < 2 && light < 40){
+              digitalWrite(pump, LOW);
+              if(millis() - activationTime > (maxTime * ONE_MINUTES)){
+                 digitalWrite(pump, HIGH);
+                 isOnPump = false;
+                 counterOnPump++;
+                 activationTime = millis();
+              }
+           }else if(isOnPump && counterOnPump < 2){
+              digitalWrite(pump, LOW);
+              if(millis() - activationTime > (minTime * minutes)){
+                digitalWrite(pump, HIGH);
+                isOnPump = false;
+                counterOnPump++;
+                activationTime = millis();
+              }
+            }
 
             break;
         case SOIL_MOISTURE_MODE:
@@ -81,27 +126,12 @@ void loop() {
 
 // DHT dht(dhtPin,DHTTYPE);
 //
-// int lightLDR=39;
 // int soilMoisture=39;
 
 // #define a1a 18
 // #define a1b 19
 
 
-
-
-
-//------------temp mode-----------
-// int currentState;
-// float temp;
-// int minTime;
-// int maxTime;
-
-// temp = doc["temperature"]["temp"];
-// minTime = doc["temperature"]["minTime"];
-// maxTime = doc["temperature"]["maxTime"];
-
-//----------------------------------
 
 
 //------------soilMoisture mode-----------
@@ -139,14 +169,6 @@ void loop() {
 // }
 
 
-
-
-
-// sendData();
-// int light=analogRead(lightLDR);
-// int lightLDRValue = map(light, 0, 4095, 0, 100);
-// Serial.println(mapValue);
-// delay(500);
 
 // int soilMoistureValue=analogRead(soilMoisture);
 // int moistureValue = map(soilMoistureValue, 0, 4095, 0, 100);
