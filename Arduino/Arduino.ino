@@ -1,10 +1,85 @@
 #include <DHT.h>
 #include <ArduinoJson.h>
 
-// #define DHTPIN 16
+//------------הגדרת משתנים כלליים---------------
+
+#define TEMP_MODE 100
+#define SOIL_MOISTURE_MODE 101
+#define SHABBAT_MODE 102
+#define MANUAL_MODE 103
+
+JsonDocument doc;
+
+int currentState;
+unsigned long lastCheckTime = 0;
+const unsigned long ONE_MINUTES = (1000 * 60); // convert milli-seconds to 1 min
+
+bool isOnPump;
+int counterOnPump = 0;
+
+float currentTemp;
+float tempServer;
+int minTime ,maxTime ;
+
+
+
+
+
+
+void setup() {
+  Serial.begin(115200);
+  // dht.begin();
+  // WiFi_SETUP();
+  // pinMode(a1a,OUTPUT);
+  // pinMode(a1b,OUTPUT);
+    lastCheckTime=millis();
+}
+
+
+
+
+
+
+void loop() {
+
+  if( (millis() - lastCheckTime) >= (ONE_MINUTES * 10){
+    currentState = GetState();
+    lastCheckTime = millis();
+    Serial.println("current State = "+ string(currentState));
+  }
+
+  switch(currentState){
+        case TEMP_MODE:
+            Serial.println("Mode: Temperature");
+            currentTemp = dht.readTemperature();
+
+            break;
+        case SOIL_MOISTURE_MODE:
+            Serial.println("Mode: Soil Humidity");
+            break;
+        case SHABBAT_MODE:
+            Serial.println("Mode: Shabbat");
+            break;
+        case MANUAL_MODE:
+            Serial.println("Mode: Manual");
+            break;
+        default:
+            Serial.println("Unknown mode, switching to Manual");
+            currentState = Mode_Manual;
+            break;
+    }
+
+}
+
+
+
+
+
+
+// #define dhtPin 16
 // #define DHTTYPE DHT11
 
-// DHT dht(DHTPIN,DHTTYPE);
+// DHT dht(dhtPin,DHTTYPE);
 //
 // int lightLDR=39;
 // int soilMoisture=39;
@@ -45,74 +120,6 @@
 // activatePump = doc["manual"]["activatePump"];
 
 //----------------------------------
-
-//------------הגדרת משתנים כלליים---------------
-
-#define TEMP_MODE 100
-#define SOIL_MOISTURE_MODE 101
-#define SHABBAT_MODE 102
-#define MANUAL_MODE 103
-
-int currentState;
-unsigned long lastCheckTime = 0;
-const unsigned long ONE_MINUTES = (1000 * 60); // convert milli-seconds to 1 min
-
-
-float currentTemp;
-
-
-
-
-
-
-
-
-void setup() {
-  Serial.begin(115200);
-  // dht.begin();
-  // WiFi_SETUP();
-  // pinMode(a1a,OUTPUT);
-  // pinMode(a1b,OUTPUT);
-
-
-}
-
-
-
-
-
-
-void loop() {
-
-  if( (millis() - lastCheckTime) >= (ONE_MINUTES * 10){
-    currentState = GetState();
-    lastCheckTime = millis();
-    Serial.println("current State = "+ string(currentState));
-  }
-
-  switch(currentState){
-        case TEMP_MODE:
-            Serial.println("Mode: Temperature");
-            currentTemp = dht.readTemperature();
-
-            break;
-        case SOIL_MOISTURE_MODE:
-            Serial.println("Mode: Soil Humidity");
-            break;
-        case SHABBAT_MODE:
-            Serial.println("Mode: Shabbat");
-            break;
-        case MANUAL_MODE:
-            Serial.println("Mode: Manual");
-            break;
-        default:
-            Serial.println("Unknown mode, switching to Manual");
-            currentState = Mode_Manual;
-            break;
-    }
-
-}
-
 
 
 
