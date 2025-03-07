@@ -4,7 +4,8 @@
 
 
 
-
+#define a1a 18
+#define a1b 19
 #define lightSensor=39;
 //------------הגדרת משתנים כלליים---------------
 
@@ -37,10 +38,10 @@ int light;
 
 void setup() {
   Serial.begin(115200);
-  // dht.begin();
-  // WiFi_SETUP();
-  // pinMode(a1a,OUTPUT);
-  // pinMode(a1b,OUTPUT);
+  dht.begin();
+  WiFi_SETUP();
+  pinMode(a1a,OUTPUT);
+  pinMode(a1b,OUTPUT);
   isOnPump = true;
   lastCheckTime=millis();
 }
@@ -81,17 +82,17 @@ void loop() {
             }
 
            if(isOnPump && temp < CurrentTemp && countOn < 2 && light < 40){
-              digitalWrite(pump, LOW);
+              pumpOn();
               if(millis() - activationTime > (maxTime * ONE_MINUTES)){
-                 digitalWrite(pump, HIGH);
+                 pumpOff();
                  isOnPump = false;
                  counterOnPump++;
                  activationTime = millis();
               }
            }else if(isOnPump && counterOnPump < 2){
-              digitalWrite(pump, LOW);
+              pumpOn();
               if(millis() - activationTime > (minTime * minutes)){
-                digitalWrite(pump, HIGH);
+                pumpOff();
                 isOnPump = false;
                 counterOnPump++;
                 activationTime = millis();
@@ -128,8 +129,7 @@ void loop() {
 //
 // int soilMoisture=39;
 
-// #define a1a 18
-// #define a1b 19
+
 
 
 
@@ -158,15 +158,15 @@ void loop() {
 
 
 
-// function pumpOn(){
-//     digitalWrite(a1a,HIGH);
-//     digitalWrite(a1b,LOW);
-// }
-//
-// function pumpOff(){
-//   digitalWrite(a1a,HIGH);
-//   digitalWrite(a1b,HIGH);
-// }
+function pumpOn(){
+    digitalWrite(a1a,HIGH);
+    digitalWrite(a1b,LOW);
+}
+
+function pumpOff(){
+  digitalWrite(a1a,HIGH);
+  digitalWrite(a1b,HIGH);
+}
 
 
 
