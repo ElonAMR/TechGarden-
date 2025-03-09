@@ -13,7 +13,7 @@ router.get('/state',(req,res)=>{
         state:data.state,
         date:new Date().getHours()
     }
-    res.JSON(data);
+    res.json(data);
 });
 
 router.get('/dataMode' ,(req, res)=>{
