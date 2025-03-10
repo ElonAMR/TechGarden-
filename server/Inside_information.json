@@ -6,7 +6,7 @@
       "maxTime": 3
   },
   "soilHumidity": {
-    "desiredHumidity": 60
+    "desiredHumidity": 60.0
   },
   "shabbat": {
     "startTime": "06:00",

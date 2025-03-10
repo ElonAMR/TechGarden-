@@ -7,6 +7,8 @@
 #define a1a 18
 #define a1b 19
 #define lightSensor=39;
+#define humiditySensor=40;
+
 //------------הגדרת משתנים כלליים---------------
 
 #define TEMP_MODE 100
@@ -23,6 +25,7 @@ unsigned long DataPullTime;
 unsigned long activationTime;
 
 bool isOnPump;
+bool pumpPowerOn=false;
 int counterOnPump = 0;
 unsigned long DataPullTime;
 unsigned long pumpOnTime;
@@ -33,6 +36,8 @@ int minTime ,maxTime ;
 int light;
 
 
+float humidity;
+float currentHumidity;
 
 
 
@@ -100,8 +105,27 @@ void loop() {
             }
 
             break;
+
+
         case SOIL_MOISTURE_MODE:
+
             Serial.println("Mode: Soil Humidity");
+            deserializeJson(doc, getJsonData("soilHumidity"));
+            Humidity = doc["desiredHumidity"];
+            currentHumidity = map(analogRead(humiditySensor), 0, 4095, 0, 100);
+            if(currentHumidity < (humidity * 0.9)){
+                isOnPump=true;
+                pumpOn();
+                pumpPowerOn=true;
+            }
+
+
+
+
+
+
+
+
             break;
         case SHABBAT_MODE:
             Serial.println("Mode: Shabbat");
@@ -118,46 +142,6 @@ void loop() {
 }
 
 
-
-
-
-
-// #define dhtPin 16
-// #define DHTTYPE DHT11
-
-// DHT dht(dhtPin,DHTTYPE);
-//
-// int soilMoisture=39;
-
-
-
-
-
-
-//------------soilMoisture mode-----------
-// desiredHumidity = doc["soilHumidity"]["desiredHumidity"];
-
-//----------------------------------
-
-
-//------------shabbat mode-----------
-// startTime = doc["shabbat"]["startTime"].as<String>();
-// endTime = doc["shabbat"]["endTime"].as<String>();
-// wateringDuration = doc["shabbat"]["wateringDuration"];
-//----------------------------------
-
-//------------manual mode-----------
-// activatePump = doc["manual"]["activatePump"];
-
-//----------------------------------
-
-
-
-
-
-
-
-
 function pumpOn(){
     digitalWrite(a1a,HIGH);
     digitalWrite(a1b,LOW);
@@ -170,17 +154,17 @@ function pumpOff(){
 
 
 
+
+// #define dhtPin 16
+// #define DHTTYPE DHT11
+
+// DHT dht(dhtPin,DHTTYPE);
+// int soilMoisture=39;
+
 // int soilMoistureValue=analogRead(soilMoisture);
 // int moistureValue = map(soilMoistureValue, 0, 4095, 0, 100);
 // Serial.println(moistureValue);
-// delay(1000);
 
 
 // float humidity = dht.readHumidity();
-//  Serial.print("🌡️ temperature: ");
-//   Serial.print(temperature);
-//   Serial.println(" °C");
 
-//   Serial.print("💧 humidity: ");
-//   Serial.print(humidity);
-//   Serial.println(" %");
