@@ -117,13 +117,11 @@ void loop() {
             Humidity = doc["desiredHumidity"];
             currentHumidity = map(analogRead(humiditySensor), 0, 4095, 0, 100);
             if(currentHumidity < (humidity * 0.9)){
-                isOnPump=true;
                 pumpOn();
                 pumpPowerOn=true;
-            }else if(currentHumidity > (humidity * 1.1) && pumpPowerOn){
-                pumpOff();
-                isOnPump=false;
-                pumpPowerOn=false;
+            }else if(currentHumidity > (humidity * 1.1)){
+                 pumpOff();
+                 pumpPowerOn = false;
             }
             break;
 
