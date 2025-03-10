@@ -16,6 +16,9 @@
 #define SHABBAT_MODE 102
 #define MANUAL_MODE 103
 
+// #define dht DHT22
+// DHT dht(dhtPin, dht);
+
 JsonDocument doc;
 
 int currentState;
@@ -117,16 +120,16 @@ void loop() {
                 isOnPump=true;
                 pumpOn();
                 pumpPowerOn=true;
+            }else if(currentHumidity > (humidity * 1.1) && pumpPowerOn){
+                pumpOff();
+                isOnPump=false;
+                pumpPowerOn=false;
             }
-
-
-
-
-
-
-
-
             break;
+
+
+
+
         case SHABBAT_MODE:
             Serial.println("Mode: Shabbat");
             break;
@@ -152,19 +155,4 @@ function pumpOff(){
   digitalWrite(a1b,HIGH);
 }
 
-
-
-
-// #define dhtPin 16
-// #define DHTTYPE DHT11
-
-// DHT dht(dhtPin,DHTTYPE);
-// int soilMoisture=39;
-
-// int soilMoistureValue=analogRead(soilMoisture);
-// int moistureValue = map(soilMoistureValue, 0, 4095, 0, 100);
-// Serial.println(moistureValue);
-
-
-// float humidity = dht.readHumidity();
 
