@@ -42,7 +42,7 @@ int light;
 float humidity;
 float currentHumidity;
 
-
+bool activatePump;
 
 void setup() {
   Serial.begin(115200);
@@ -131,9 +131,20 @@ void loop() {
         case SHABBAT_MODE:
             Serial.println("Mode: Shabbat");
             break;
+
+
+
         case MANUAL_MODE:
             Serial.println("Mode: Manual");
+            deserializeJson(doc, getJsonData("manual"));
+            activatePump = doc["activatePump"];
+            if(activatePump && !pumpPowerOn){
+                pumpOn();
+            }else if(!activatePump){
+                pumpOff()
+            }
             break;
+
         default:
             Serial.println("Unknown mode, switching to Manual");
             currentState = Mode_Manual;

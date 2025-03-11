@@ -9,8 +9,8 @@
     "desiredHumidity": 60.0
   },
   "shabbat": {
-    "startTime": "06:00",
-    "endTime": "08:00",
+    "firstStart": "10:00",
+    "secondStart": "20:00",
     "wateringDuration": 30
   },
     "manual": {
