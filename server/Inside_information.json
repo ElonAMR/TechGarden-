@@ -1,5 +1,4 @@
 {
-  "currentTimeHour": "",
   "state": "100",
   "temperature":{
       "temp": 23.50,
@@ -10,6 +9,7 @@
     "desiredHumidity": 60.0
   },
   "shabbat": {
+    "currentTimeHour": "",
     "firstStart": "10:00",
     "secondStart": "20:00",
     "wateringDuration": 30

@@ -26,3 +26,6 @@ app.listen(HTTP_PORT,()=>{
 
 const esp=require('./routers/esp');
 app.use('/esp',esp);
+
+const tree = require("./routers/treeRout");
+app.use("/tree", tree);

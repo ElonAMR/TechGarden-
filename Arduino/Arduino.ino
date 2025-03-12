@@ -42,6 +42,14 @@ int light;
 float humidity;
 float currentHumidity;
 
+
+int currentHour;
+int firstStart;
+int secondStart;
+int wateringDuration;
+
+
+
 bool activatePump;
 
 void setup() {
@@ -132,10 +140,10 @@ void loop() {
             Serial.println("Mode: Shabbat");
 
             deserializeJson(doc, getJsonData("shabbat"));
-            int currentHour = GetData();
-            int firstStart = doc["firstStart"];
-            int secondStart = doc["secondStart"];
-            int wateringDuration = doc["wateringDuration"];
+            currentHour = doc["currentTimeHour"];
+            firstStart = doc["firstStart"];
+            secondStart = doc["secondStart"];
+            wateringDuration = doc["wateringDuration"];
 
 
 

@@ -10,7 +10,7 @@ router.get('/',(req,res)=>{
 router.get('/state',(req,res)=>{
     let data = JSON.parse(fs.readFileSync("Inside_information.json", "utf8"));
 
-    data.currentTimeHour = new Date().getHours().toString();
+    data.shabbat.currentTimeHour = new Date().getHours().toString();
 
     fs.writeFileSync("Inside_information.json", JSON.stringify(data), 'utf8');
 
