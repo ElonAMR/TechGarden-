@@ -9,11 +9,12 @@ router.get('/',(req,res)=>{
 
 router.get('/state',(req,res)=>{
     let data = JSON.parse(fs.readFileSync("Inside_information.json", "utf8"));
-    data={
-        state:data.state,
-        date:new Date().getHours()
-    }
-    res.json(data);
+
+    data.currentTimeHour = new Date().getHours().toString();
+
+    fs.writeFileSync("Inside_information.json", JSON.stringify(data), 'utf8');
+
+    res.json(data.state);
 });
 
 router.get('/dataMode' ,(req, res)=>{

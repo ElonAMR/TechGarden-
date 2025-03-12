@@ -62,7 +62,7 @@ void setup() {
 void loop() {
 
   if( (millis() - lastCheckTime) >= (ONE_MINUTES * 10){
-    currentState = GetState();
+    currentState = GetData();
     lastCheckTime = millis();
     Serial.println("current State = "+ string(currentState));
   }
@@ -130,6 +130,18 @@ void loop() {
 
         case SHABBAT_MODE:
             Serial.println("Mode: Shabbat");
+
+            deserializeJson(doc, getJsonData("shabbat"));
+            int currentHour = GetData();
+            int firstStart = doc["firstStart"];
+            int secondStart = doc["secondStart"];
+            int wateringDuration = doc["wateringDuration"];
+
+
+
+
+
+
             break;
 
 
