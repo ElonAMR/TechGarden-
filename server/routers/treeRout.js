@@ -5,6 +5,18 @@ const db = require('../models/database');
 
 const tree = new Tree(db);
 
+router.get("/getAllTree", async (req, res) => {
+    try {
+        let AllTree = await tree.getAllTree();
+        res.status(201).json({message: "all threes:",AllTree});
+
+    } catch (error) {
+        console.log(error);
+    }
+
+});
+
+
 router.post("/add", async (req, res) => {
     try {
         const { name } = req.body;

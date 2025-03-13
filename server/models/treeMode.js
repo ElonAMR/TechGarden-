@@ -12,19 +12,28 @@ class Tree {
         try {
             const date = new Date();
             const formattedDate = date.toISOString().split('T')[0];
+
+            // שלב 1: חפש עץ בטבלה plants לפי שם
             let [sql] = await this.DB.execute(`SELECT * FROM plants WHERE name = ?`, [nameTree]);
+            console.log('Result from plants:', sql);  // הדפס את תוצאות השאילתה
+
+            // אם העץ קיים בטבלת plants, הוסף אותו לטבלת threes
             if (sql.length > 0) {
-                await this.DB.execute(`INSERT INTO threes(id_plants, date) VALUE(?,?);`, [sql[0].id, formattedDate]);
+                await this.DB.execute(`INSERT INTO threes(id_plants, date) VALUES(?,?);`, [sql[0].id, formattedDate]);
+                console.log(`Tree added to threes with id: ${sql[0].id} and date: ${formattedDate}`);
             } else {
-                sql = await this.DB.execute(`INSERT INTO plants(name) VALUE(?);`, [nameTree]);
-                await this.DB.execute(`INSERT INTO threes(id_plants, date) VALUE(?,?);`, [sql.insertId, formattedDate]);
-                console.log(sql);
+                // אם העץ לא קיים, הוסף אותו לטבלת plants ואז הוסף אותו לטבלת threes
+                let [result] = await this.DB.execute(`INSERT INTO plants(name) VALUES(?);`, [nameTree]);
+                console.log('New tree added to plants:', result);  // הדפס את תוצאות השאילתה
+
+                // עכשיו השתמש ב-`insertId` כדי להוסיף את העץ לטבלת threes
+                await this.DB.execute(`INSERT INTO threes(id_plants, date) VALUES(?,?);`, [result.insertId, formattedDate]);
+                console.log(`Tree added to threes with id: ${result.insertId} and date: ${formattedDate}`);
             }
         } catch (error) {
-            console.log(error);
+            console.log('Error in createTree:', error);
         }
     }
-
     async deleteTree(idTree) {
         try {
             await this.DB.execute(`DELETE FROM threes WHERE id = ?`, [idTree]);
