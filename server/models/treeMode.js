@@ -25,9 +25,14 @@ class Tree{
     }
 
 
-    async deleteTree(nameTree){
+    async deleteTree(idTree){
         try {
+            await this.DB.execute(`DELETE FROM threes WHERE id = ?`, [idTree]);
 
+            let [plants] = await this.DB.execute(`SELECT * FROM threes WHERE id_plants = (SELECT id_plants FROM threes WHERE id = ?)`, [idTree]);
+
+            if (plants.length === 0) {
+                await this.DB.execute(`DELETE FROM plants WHERE id = (SELECT id_plants FROM threes WHERE id = ?)`, [idTree]);
         }catch(error){
             console.log(error);
         }
