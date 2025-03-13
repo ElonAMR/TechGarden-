@@ -1,22 +1,23 @@
-class Tree{
-    constructor(db){
+class Tree {
+    constructor(db) {
         this.DB = db;
     }
 
-    async getAllTree(){
-        let [sql]= await this.DB.execute(`SELECT * FROM threes,plants WHERE id_plants = id`);
+    async getAllTree() {
+        let [sql] = await this.DB.execute(`SELECT threes.*, plants.name FROM threes JOIN plants ON threes.id_plants = plants.id`);
+        return sql;
     }
 
-    async createTree(nameTree){
+    async createTree(nameTree) {
         try {
             const date = new Date();
             const formattedDate = date.toISOString().split('T')[0];
-            let [sql]= await this.DB.execute(`SELECT * FROM plants where name = ?`,[nameTree]);
-            if(sql.length > 0){
-                await this.DB.execute(`INSERT INTO threes(id_plants, date) VALUE(?,?);`,[sql[0].id, formattedDate]);
-            }else{
-                sql = await this.DB.execute(`INSERT INTO plants(name) VALUE(?);`,[nameTree]);
-                await this.DB.execute(`INSERT INTO threes(id_plants, date) VALUE(?,?);`,[sql.insertId, formattedDate]);
+            let [sql] = await this.DB.execute(`SELECT * FROM plants WHERE name = ?`, [nameTree]);
+            if (sql.length > 0) {
+                await this.DB.execute(`INSERT INTO threes(id_plants, date) VALUE(?,?);`, [sql[0].id, formattedDate]);
+            } else {
+                sql = await this.DB.execute(`INSERT INTO plants(name) VALUE(?);`, [nameTree]);
+                await this.DB.execute(`INSERT INTO threes(id_plants, date) VALUE(?,?);`, [sql.insertId, formattedDate]);
                 console.log(sql);
             }
         } catch (error) {
@@ -24,8 +25,7 @@ class Tree{
         }
     }
 
-
-    async deleteTree(idTree){
+    async deleteTree(idTree) {
         try {
             await this.DB.execute(`DELETE FROM threes WHERE id = ?`, [idTree]);
 
@@ -33,20 +33,19 @@ class Tree{
 
             if (plants.length === 0) {
                 await this.DB.execute(`DELETE FROM plants WHERE id = (SELECT id_plants FROM threes WHERE id = ?)`, [idTree]);
-        }catch(error){
+            }
+        } catch (error) {
             console.log(error);
         }
     }
 
-    async updateTree(nameTree){
+    async updateTreeName(idTree, newName) {
         try {
-
-        }catch (error){
+            await this.DB.execute(`UPDATE plants SET name = ? WHERE id = (SELECT id_plants FROM threes WHERE id = ?)`, [newName, idTree]);
+        } catch (error) {
             console.log(error);
         }
     }
-
-
 }
 
 module.exports = Tree;

@@ -5,10 +5,10 @@ const db = require('../models/database');
 
 const tree = new Tree(db);
 
-router.post("/add", (req, res) => {
+router.post("/add", async (req, res) => {
     try {
         const { name } = req.body;
-        tree.createTree(name);
+        await tree.createTree(name);
         res.status(201).json({message: "create tree success"});
 
     } catch (error) {
@@ -29,7 +29,17 @@ router.delete("/delete/:id", async (req, res) => {
 });
 
 
-
+router.put("/update/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name } = req.body;
+        await tree.updateTreeName(id, name);
+        res.status(200).json({ message: "Tree name updated successfully" });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Error updating tree name" });
+    }
+});
 
 
 
