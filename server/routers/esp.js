@@ -2,9 +2,24 @@ const express = require('express');
 const router = express.Router();
 const fs=require('fs');
 
-router.get('/',(req,res)=>{
-    const  {temp , light , moisture} = req.query;
-    console.log("temp = "+temp + ", light = "+light +", moisture = "+moisture);
+router.get('/',async (req,res)=>{
+    try{
+        const  {temp , light , moisture} = req.query;
+        console.log("temp = "+temp + ", light = "+light +", moisture = "+moisture);
+        const id_threes = 1;
+
+        await db.execute(
+            `INSERT INTO dataSensors (id_threes, name_sensor, avg, date, isRunning) VALUES 
+                (?, 'temperature', ?, NOW(), 1),
+                (?, 'light', ?, NOW(), 1),
+                (?, 'moisture', ?, NOW(), 1)`,
+            [id_threes, temp, id_threes, light, id_threes, moisture]
+        );
+        res.status(200).json({ message: "Data received and stored" });
+    }catch (error){
+        console.log(error);
+        res.status(500).json({ message: "Error storing data" });
+    }
 });
 
 router.get('/state',(req,res)=>{
