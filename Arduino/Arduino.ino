@@ -24,19 +24,18 @@ JsonDocument doc;
 int currentState;
 unsigned long lastCheckTime = 0;
 const unsigned long ONE_MINUTES = (1000 * 60); // convert milli-seconds to 1 min
-unsigned long DataPullTime;
-unsigned long activationTime;
 
-bool isOnPump;
-bool pumpPowerOn=false;
-int counterOnPump = 0;
-unsigned long DataPullTime;
-unsigned long pumpOnTime;
 
 float currentTemp;
 float tempServer;
 int minTime ,maxTime ;
 int light;
+bool pumpPowerOn=false;
+bool isMorning;
+int counterOnPump = 0;
+unsigned long DataPullTime=0;
+unsigned long activationTime=0;
+
 
 
 float humidity;
@@ -50,7 +49,6 @@ int wateringDuration;
 
 
 
-bool activatePump;
 
 void setup() {
   Serial.begin(115200);
@@ -58,7 +56,6 @@ void setup() {
   WiFi_SETUP();
   pinMode(a1a,OUTPUT);
   pinMode(a1b,OUTPUT);
-  isOnPump = true;
   lastCheckTime=millis();
 }
 
@@ -69,19 +66,19 @@ void setup() {
 
 void loop() {
 
-  if( (millis() - lastCheckTime) >= (ONE_MINUTES * 10){
+  if( (millis() - lastCheckTime) >= (ONE_MINUTES * 10) ){
     currentState = GetData();
     lastCheckTime = millis();
-    Serial.println("current State = "+ string(currentState));
+    Serial.println("current State = "+ String(currentState));
   }
 
   switch(currentState){
         case TEMP_MODE:
 
             Serial.println("Mode: Temperature");
-
             currentTemp = dht.readTemperature();
             light = map(analogRead(lightSensor),0,4095,0,100);
+
              if((millis() - DataPullTime) > (2 * minutes)){
                 deserializeJson(doc, getJsonData("temperature"));
                 temp = (float) doc["temp"];

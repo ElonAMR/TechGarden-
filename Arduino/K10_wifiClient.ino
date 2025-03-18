@@ -59,7 +59,7 @@ int GetData() {
 String getJsonData(String state){
     string json = "";
     HTTPClient http;
-    http.begin(client, "http://192.168.1.83:3001/esp/dataMode?state="+state);
+    http.begin(client, "http://192.168.1.83:4000/esp/dataMode?state="+state);
     int httpCode = http.GET();
     Serial.println(httpCode);
     if (httpCode == HTTP_CODE_OK) {
