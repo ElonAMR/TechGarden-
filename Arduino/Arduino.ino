@@ -95,11 +95,11 @@ void loop() {
                 activationTime = millis(); // שמירת זמן ההתחלה
                 counterOnPump++;
           }
-          else if (!isMorning && counterOnPump == 1 && !pumpPowerOn) {
+          else if (!isMorning && counterOnPump < 2 && !pumpPowerOn) {
                 pumpOn();
                 pumpPowerOn = true;
                 activationTime = millis();
-                counterOnPump++; // כעת זה 2 - כלומר סיימנו את ההשקיה להיום
+                counterOnPump++;
           }
             // אם המשאבה דלוקה - בדיקה אם צריך לכבות
           if (pumpPowerOn) {
