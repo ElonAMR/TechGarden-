@@ -3,7 +3,8 @@
 
 
 
-
+// #define dht DHT22
+// DHT dht(dhtPin, dht);
 #define a1a 18
 #define a1b 19
 #define lightSensor=39;
@@ -16,15 +17,12 @@
 #define SHABBAT_MODE 102
 #define MANUAL_MODE 103
 
-// #define dht DHT22
-// DHT dht(dhtPin, dht);
-
 JsonDocument doc;
-
 int currentState;
 unsigned long lastCheckTime = 0;
 const unsigned long ONE_MINUTES = (1000 * 60); // convert milli-seconds to 1 min
 
+//------------הגדרת משתנים מוד טמפרטורה---------------
 
 float currentTemp;
 float tempServer;
@@ -36,16 +34,21 @@ int counterOnPump = 0;
 unsigned long DataPullTime=0;
 unsigned long activationTime=0;
 
-
+//------------הגדרת משתנים מוד לחות---------------
 
 float humidity;
 float currentHumidity;
 
+//------------הגדרת משתנים מוד שבת---------------
 
 int currentHour;
 int firstStart;
 int secondStart;
 int wateringDuration;
+
+//------------הגדרת משתנים מוד ידני---------------
+
+bool activatePump;
 
 
 
@@ -58,10 +61,6 @@ void setup() {
   pinMode(a1b,OUTPUT);
   lastCheckTime=millis();
 }
-
-
-
-
 
 
 void loop() {
@@ -90,9 +89,9 @@ void loop() {
             isMorning = (light >= 50);
             // אם בוקר ועדיין לא השקנו
           if (isMorning && counterOnPump == 0 && !pumpPowerOn) {
-                pumpOn(); // הפעלת משאבה
+                pumpOn();
                 pumpPowerOn = true;
-                activationTime = millis(); // שמירת זמן ההתחלה
+                activationTime = millis();
                 counterOnPump++;
           }
           else if (!isMorning && counterOnPump < 2 && !pumpPowerOn) {
@@ -115,7 +114,6 @@ void loop() {
 
           break;
 
-
         case SOIL_MOISTURE_MODE:
 
             Serial.println("Mode: Soil Humidity");
@@ -131,12 +129,9 @@ void loop() {
             }
             break;
 
-
-
-
         case SHABBAT_MODE:
-            Serial.println("Mode: Shabbat");
 
+            Serial.println("Mode: Shabbat");
             deserializeJson(doc, getJsonData("shabbat"));
             currentHour = doc["currentTimeHour"];
             firstStart = doc["firstStart"];
@@ -149,8 +144,6 @@ void loop() {
 
 
             break;
-
-
 
         case MANUAL_MODE:
             Serial.println("Mode: Manual");
@@ -170,16 +163,6 @@ void loop() {
     }
 
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
