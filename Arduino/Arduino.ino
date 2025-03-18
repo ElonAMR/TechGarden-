@@ -86,7 +86,7 @@ void loop() {
                DataPullTime = millis();
           }
 
-            isMorning = (light >= 50);
+            isMorning = (light >= 30);
             // אם בוקר ועדיין לא השקנו
           if (isMorning && counterOnPump == 0 && !pumpPowerOn) {
                 pumpOn();
