@@ -75,44 +75,45 @@ void loop() {
   switch(currentState){
         case TEMP_MODE:
 
-            Serial.println("Mode: Temperature");
-            currentTemp = dht.readTemperature();
-            light = map(analogRead(lightSensor),0,4095,0,100);
+          Serial.println("Mode: Temperature");
+          currentTemp = dht.readTemperature();
+          light = map(analogRead(lightSensor), 0, 4095, 0, 100);
 
-             if((millis() - DataPullTime) > (2 * minutes)){
-                deserializeJson(doc, getJsonData("temperature"));
-                temp = (float) doc["temp"];
-                minTime = doc["minTime"];
-                maxTime = doc["maxTime"];
-                DataPullTime = millis();
-             }
+          if (millis() - DataPullTime >= (2 * minutes) || lastCheckTime == 0 ) {
+               deserializeJson(doc, getJsonData("temperature"));
+               tempServer = (float) doc["temp"];
+               minTime = doc["minTime"];
+               maxTime = doc["maxTime"];
+               DataPullTime = millis();
+          }
 
-            if(light > 90){
-                isOnPump = true;
-            }else if(light < 10 && counterOnPump == 2){
-                isOnPump = true;
-                counterOnPump = 0 ;
-            }
-
-           if(isOnPump && temp < CurrentTemp && countOn < 2 && light < 40){
-              pumpOn();
-              if(millis() - activationTime > (maxTime * ONE_MINUTES)){
-                 pumpOff();
-                 isOnPump = false;
-                 counterOnPump++;
-                 activationTime = millis();
-              }
-           }else if(isOnPump && counterOnPump < 2){
-              pumpOn();
-              if(millis() - activationTime > (minTime * minutes)){
-                pumpOff();
-                isOnPump = false;
+            isMorning = (light >= 50);
+            // אם בוקר ועדיין לא השקנו
+          if (isMorning && counterOnPump == 0 && !pumpPowerOn) {
+                pumpOn(); // הפעלת משאבה
+                pumpPowerOn = true;
+                activationTime = millis(); // שמירת זמן ההתחלה
                 counterOnPump++;
+          }
+          else if (!isMorning && counterOnPump == 1 && !pumpPowerOn) {
+                pumpOn();
+                pumpPowerOn = true;
                 activationTime = millis();
+                counterOnPump++; // כעת זה 2 - כלומר סיימנו את ההשקיה להיום
+          }
+            // אם המשאבה דלוקה - בדיקה אם צריך לכבות
+          if (pumpPowerOn) {
+              if (millis() - activationTime >= ((tempServer > currentTemp ? maxTime : minTime) * ONE_MINUTES)) {
+                  pumpOff();
+                  pumpPowerOn = false;
               }
-            }
+          }
+          // בדיקה אם צריך להתחיל יום חדש
+          if (isMorning && counterOnPump == 2) {
+               counterOnPump = 0;
+          }
 
-            break;
+          break;
 
 
         case SOIL_MOISTURE_MODE:
@@ -169,6 +170,17 @@ void loop() {
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 function pumpOn(){
